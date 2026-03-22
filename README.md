@@ -1,133 +1,116 @@
 # 🗑️ Discord Message Deleter
 
-Herramienta de línea de comandos para eliminar **tus propios mensajes** de Discord, tanto en canales de servidor como en conversaciones directas (DMs).
-----------
- <a href="https://imgbox.com/nBrhOZ4J" target="_blank"><img src="https://thumbs2.imgbox.com/85/81/nBrhOZ4J_t.png" alt="image host"/></a>
-----------
+**Elimina tus propios mensajes de Discord desde una interfaz visual en terminal.**
+Soporta canales de servidor y conversaciones directas (DMs).
+
+---
+
+## 📸 Capturas
+
+<div align="center">
+  <img src="https://thumbs2.imgbox.com/39/71/x2tqBM5f_t.png" width="45%" alt="Lista de mensajes"/>
+  <br/>
+  <img src="https://thumbs2.imgbox.com/89/93/8Oo6VLN0_t.png" width="45%" alt="Progreso de borrado"/>
+  <img src="https://thumbs2.imgbox.com/b1/0c/grIL4YWI_t.png" width="45%" alt="Resumen final"/>
+</div>
+
+---
 
 ## ⚠️ Aviso Legal
 
-> Este script **solo puede borrar tus propios mensajes**. Usar tokens de otras personas viola los [Términos de Servicio de Discord](https://discord.com/terms). Úsalo de forma responsable y solo con tu propio token.
+> Este script **solo puede borrar tus propios mensajes**.
+> Usar tokens ajenos viola los [Términos de Servicio de Discord](https://discord.com/terms).
+> Úsalo de forma responsable y únicamente con tu propia cuenta.
 
-----------
+---
 
 ## ✨ Características
 
--   Elimina todos tus mensajes de un **canal de servidor**
--   Elimina todos tus mensajes de un **DM** con otro usuario
--   Vista previa de mensajes antes de borrar
--   Manejo automático de **rate limits**
--   Resumen final con mensajes borrados y errores
+| | |
+|---|---|
+| 🖥️ **Interfaz TUI** | Interfaz visual interactiva en terminal con `curses` |
+| 🔐 **Token seguro** | El token se ingresa oculto con caracteres `*` |
+| 📜 **Lista navegable** | Revisa todos tus mensajes con scroll antes de borrar |
+| 📊 **Progreso en vivo** | Barra de progreso y registro de operaciones en tiempo real |
+| ⚡ **Rate limit inteligente** | Esperas aleatorias automáticas para evitar bloqueos de Discord |
+| 🛡️ **Aviso obligatorio** | Pantalla de aceptación explícita al iniciar |
+| 💬 **Servidores y DMs** | Funciona tanto en canales de servidor como en mensajes directos |
 
-----------
+---
 
 ## 📋 Requisitos
 
--   Python 3.7+
--   Librería `requests`
+- Python 3.7+
+- Librería `requests`
+- `curses` — incluido en Python estándar en Linux/macOS
 
 ```bash
 pip install requests
 
+# Solo en Windows:
+pip install windows-curses
 ```
 
-----------
+---
 
-## 🚀 Uso
-
-```bash
-python discord_deleter.py
-
+### Flujo de uso
+```
+1. Acepta el aviso de uso escribiendo  ACEPTO
+2. Opción [1] → Ingresa tu token de Discord
+3. Opción [2] Canal de servidor  /  [3] Mensaje directo
+4. Ingresa los IDs del servidor y canal (o el ID del usuario en DMs)
+5. Navega la lista de mensajes encontrados con ↑ ↓
+6. Confirma la purga escribiendo  BORRAR
+7. Observa el progreso en tiempo real y el resumen final
 ```
 
-El script te guiará paso a paso:
-
-1.  **Ingresa tu token de Discord**
-2.  **Elige el modo:**
-    -   `[1]` Canal de servidor → ingresa el ID del servidor y del canal
-    -   `[2]` DM → ingresa el ID del usuario
-3.  **Revisa los mensajes encontrados** (opcional, muestra hasta 50)
-4.  **Confirma** escribiendo `BORRAR` para proceder
-
-----------
+---
 
 ## 🔑 Cómo obtener tu token de Discord
 
-> ⚠️ **Nunca compartas tu token con nadie.** Quien lo tenga puede acceder a tu cuenta.
+> ⚠️ **Nunca compartas tu token con nadie.** Quien lo tenga tiene acceso total a tu cuenta.
 
-1.  Abre Discord en el navegador o la app de escritorio
-2.  Presiona `Ctrl + Shift + I` para abrir las DevTools
-3.  Ve a la pestaña **Network** (Red)
-4.  Envía cualquier mensaje
-5.  Filtra por `/messages` y busca el header `Authorization` en la petición
+1. Abre Discord en el **navegador** o la **app de escritorio**
+2. Pulsa `Ctrl + Shift + I` para abrir las DevTools
+3. Ve a la pestaña **Network** (Red)
+4. Envía cualquier mensaje en cualquier canal
+5. Filtra las peticiones por `/messages`
+6. Abre la petición y busca el header `Authorization` — ese es tu token
 
-----------
+---
 
 ## 🆔 Cómo obtener IDs en Discord
 
-Activa el **Modo Desarrollador** en Discord: `Ajustes → Avanzado → Modo Desarrollador`
+Activa el **Modo Desarrollador** en Discord:
 
-Luego haz clic derecho en cualquier servidor, canal o usuario para copiar su ID.
+`Ajustes de usuario → Avanzado → Modo Desarrollador ✅`
 
-----------
+Con eso activado, haz **clic derecho** sobre cualquier servidor, canal o usuario y selecciona **"Copiar ID"**.
 
-## 📊 Ejemplo de ejecución
+---
 
-```
-=======================================================
-   Discord Message Deleter — Solo mensajes propios
-=======================================================
+## ⌨️ Atajos de teclado
 
-[AVISO] Este script solo puede borrar TUS mensajes.
+| Tecla | Acción |
+|:---:|---|
+| `↑` `↓` &nbsp;/&nbsp; `k` `j` | Navegar menú y lista de mensajes |
+| `Enter` | Seleccionar / Confirmar |
+| `PgUp` `PgDn` | Saltar páginas en la lista |
+| `Home` `End` | Ir al primer / último mensaje |
+| `q` `Esc` | Cancelar / Salir |
 
-🔑 Ingresa tu token de Discord: ••••••••••••••
-
-✅ Autenticado como: usuario#1234 (ID: 123456789)
-
-¿Dónde deseas borrar mensajes?
-  [1] Canal de un servidor
-  [2] DM (mensaje directo) con un usuario
-
-Elige opción (1 o 2): 1
-
-ID del servidor: 987654321
-ID del canal  : 111222333
-
-🔍 Buscando tus mensajes en el canal 111222333...
-  Buscando mensajes....
-
-📊 Encontré 42 mensaje(s) tuyo(s) en ese canal.
-
-⚠️  ¿Confirmas borrar los 42 mensajes? Esto NO se puede deshacer.
-Escribe 'BORRAR' para confirmar: BORRAR
-
-🗑️  Borrando mensajes...
-
-  ✅  | Borrado [id]: Hola a todos!
-  ✅  | Borrado [id]: ¿Alguien vio el partido?
-  ...
-
-📋 RESUMEN
-   ✅ Mensajes borrados : 42
-   ❌ Errores           : 0
-
-```
-
-----------
-
-
+---
 
 ## 📁 Estructura del proyecto
 
 ```
-discord-deleter/
-└── discord_deleter.py   # Script principal
-└── README.md            # Este archivo
-
+Discord-Message-Deleter
+├── discord_delete.py   
+└── README.md
 ```
 
-----------
+---
 
 ## 📄 Licencia
 
-Este proyecto es de uso personal. Úsalo bajo tu propia responsabilidad y respetando los Términos de Servicio de Discord.
+Proyecto de uso personal. Úsalo bajo tu propia responsabilidad y respetando los [Términos de Servicio de Discord](https://discord.com/terms).
