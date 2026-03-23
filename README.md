@@ -1,7 +1,7 @@
-# 🗑️ Discord Message Deleter
 
+# 🗑️ DRSCOR — Discord Message Deleter
 **Elimina tus propios mensajes de Discord desde una interfaz visual en terminal.**
-Soporta canales de servidor y conversaciones directas (DMs).
+Soporta canales de servidor, conversaciones directas (DMs) y grupos (Group DMs).
 
 ---
 
@@ -10,7 +10,7 @@ Soporta canales de servidor y conversaciones directas (DMs).
 <div align="center">
   <img src="https://thumbs2.imgbox.com/39/71/x2tqBM5f_t.png" width="45%" alt="Lista de mensajes"/>
   <br/>
-  <img src="https://thumbs2.imgbox.com/89/93/8Oo6VLN0_t.png" width="45%" alt="Progreso de borrado"/>
+  <img src="https://thumbs2.imgbox.com/3b/f4/g1nJQW4z_t.png" width="45%" alt="Progreso de borrado"/>
   <img src="https://thumbs2.imgbox.com/b1/0c/grIL4YWI_t.png" width="45%" alt="Resumen final"/>
 </div>
 
@@ -21,6 +21,7 @@ Soporta canales de servidor y conversaciones directas (DMs).
 > Este script **solo puede borrar tus propios mensajes**.
 > Usar tokens ajenos viola los [Términos de Servicio de Discord](https://discord.com/terms).
 > Úsalo de forma responsable y únicamente con tu propia cuenta.
+> Al iniciar la aplicación se te pedirá aceptar explícitamente estas condiciones.
 
 ---
 
@@ -34,7 +35,10 @@ Soporta canales de servidor y conversaciones directas (DMs).
 | 📊 **Progreso en vivo** | Barra de progreso y registro de operaciones en tiempo real |
 | ⚡ **Rate limit inteligente** | Esperas aleatorias automáticas para evitar bloqueos de Discord |
 | 🛡️ **Aviso obligatorio** | Pantalla de aceptación explícita al iniciar |
-| 💬 **Servidores y DMs** | Funciona tanto en canales de servidor como en mensajes directos |
+| 💬 **Servidores y DMs** | Funciona en canales de servidor y mensajes directos |
+| 👥 **Grupos (Group DMs)** | Soporte para borrar mensajes en conversaciones de grupo |
+| 🔄 **Reintentos automáticos** | Gestión de errores de red con backoff exponencial |
+| 📝 **Log de errores** | Registro detallado en `drscor_errors.log` |
 
 ---
 
@@ -46,19 +50,23 @@ Soporta canales de servidor y conversaciones directas (DMs).
 
 ```bash
 pip install requests
-
 # Solo en Windows:
 pip install windows-curses
 ```
 
 ---
 
+
 ### Flujo de uso
+
 ```
 1. Acepta el aviso de uso escribiendo  ACEPTO
 2. Opción [1] → Ingresa tu token de Discord
-3. Opción [2] Canal de servidor  /  [3] Mensaje directo
-4. Ingresa los IDs del servidor y canal (o el ID del usuario en DMs)
+3. Elige el modo:
+     [2] Canal de servidor
+     [3] Mensaje directo (DM)
+     [4] Grupo (Group DM)
+4. Ingresa los IDs necesarios según el modo elegido
 5. Navega la lista de mensajes encontrados con ↑ ↓
 6. Confirma la purga escribiendo  BORRAR
 7. Observa el progreso en tiempo real y el resumen final
@@ -87,6 +95,12 @@ Activa el **Modo Desarrollador** en Discord:
 
 Con eso activado, haz **clic derecho** sobre cualquier servidor, canal o usuario y selecciona **"Copiar ID"**.
 
+| Modo | IDs necesarios |
+|---|---|
+| Canal de servidor | ID del Servidor + ID del Canal |
+| Mensaje directo | ID del Usuario destinatario |
+| Grupo | Se selecciona de la lista automática |
+
 ---
 
 ## ⌨️ Atajos de teclado
@@ -104,10 +118,23 @@ Con eso activado, haz **clic derecho** sobre cualquier servidor, canal o usuario
 ## 📁 Estructura del proyecto
 
 ```
-Discord-Message-Deleter
-├── discord_delete.py   
+Discord-Message-Deleter/
+├── Discord-Message-Deleter.py          # Script principal
+├── drscor_errors.log  # Log de errores (se genera automáticamente)
 └── README.md
 ```
+
+---
+
+## 🐢 ¿Por qué es lento?
+
+Discord impone **límites de peticiones (rate limits)** estrictos en su API. Para proteger tu cuenta de bloqueos o baneos temporales, el script aplica:
+
+- Esperas aleatorias entre cada borrado (~0.8s ± variación)
+- Pausas automáticas al alcanzar los límites de la API
+- Reintentos con backoff exponencial ante errores de red
+
+Cuantos más mensajes tengas, más tardará. **Es completamente normal.**
 
 ---
 
